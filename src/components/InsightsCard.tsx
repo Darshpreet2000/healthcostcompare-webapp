@@ -1,12 +1,14 @@
 import React from "react";
 import { Brain, Lightbulb } from "lucide-react"; // Assuming lucide-react for icons
 import GradientText from "./GradientText";
+import ReactMarkdown from "react-markdown"; // Import react-markdown
 
 interface InsightsCardProps {
   title: string;
   summary: string;
   costVariation: string;
   patientQuestions: string[];
+  fullInsightsMarkdown: string; // New prop for full markdown content
   onRegenerate?: () => void;
 }
 
@@ -15,16 +17,21 @@ const InsightsCard: React.FC<InsightsCardProps> = ({
   summary,
   costVariation,
   patientQuestions,
+  fullInsightsMarkdown,
   onRegenerate,
 }) => {
   return (
     <div className="bg-card rounded-2xl shadow-xl p-8 border border-blue-100 transform transition-all duration-300 ease-in-out hover:scale-[1.01]">
       <h2 className="text-3xl font-extrabold text-gray-900 flex items-center gap-3 mb-5">
-        <Brain size={28} className="text-primary" />  <GradientText text={`AI Insights:`} />
+        <Brain size={28} className="text-primary" /> <GradientText text={`AI Insights:`} />
       </h2>
-      <p className="text-lg text-gray-800 leading-relaxed mb-6">{summary}</p>
+      {/* Render full markdown content */}
+      <div className="prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl max-w-none text-gray-800 leading-relaxed mb-6">
+        <ReactMarkdown>{fullInsightsMarkdown}</ReactMarkdown>
+      </div>
 
-      <div className="space-y-6 mb-6">
+      {/* Reintroducing specific sections for clarity and visual emphasis */}
+      <div className="space-y-6 mt-8">
         <div>
           <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
             <Lightbulb size={22} className="text-accent" /> Why costs vary:
@@ -43,7 +50,7 @@ const InsightsCard: React.FC<InsightsCardProps> = ({
         </div>
       </div>
 
-      <p className="text-sm text-gray-600 italic">
+      <p className="text-sm text-gray-600 italic mt-6">
         Generated using Vertex AI from real CMS & BigQuery data.
       </p>
     </div>
