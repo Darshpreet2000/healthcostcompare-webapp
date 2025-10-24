@@ -7,7 +7,7 @@ interface HospitalData {
   avgTotalPayment: number;
   medicarePayment: number;
   location: string;
-  distance: string;
+  distance_miles: number | null; // Changed to distance_miles
 }
 
 interface CompareCardProps {
@@ -43,7 +43,7 @@ const CompareCard: React.FC<CompareCardProps> = ({ hospitalA, hospitalB, summary
               <MapPin size={18} className="text-red-500" /> Location: <span className="font-bold">{hospitalA.location}</span>
             </p>
             <p className="flex items-center gap-2">
-              Distance: <span className="font-bold">{hospitalA.distance}</span>
+              Distance: <span className="font-bold">{hospitalA.distance_miles ? `${hospitalA.distance_miles.toFixed(1)} miles` : "N/A"}</span>
             </p>
           </div>
         </div>
@@ -67,7 +67,7 @@ const CompareCard: React.FC<CompareCardProps> = ({ hospitalA, hospitalB, summary
               <MapPin size={18} className="text-red-500" /> Location: <span className="font-bold">{hospitalB.location}</span>
             </p>
             <p className="flex items-center gap-2">
-              Distance: <span className="font-bold">{hospitalB.distance}</span>
+              Distance: <span className="font-bold">{hospitalB.distance_miles ? `${hospitalB.distance_miles.toFixed(1)} miles` : "N/A"}</span>
             </p>
           </div>
         </div>

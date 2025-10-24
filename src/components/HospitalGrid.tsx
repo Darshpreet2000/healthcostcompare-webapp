@@ -6,7 +6,9 @@ interface Hospital {
   name: string;
   rating: number;
   avgTotalPayment: number;
+  medicarePayment: number; // Added medicarePayment
   location: string; // e.g., "City, State"
+  distance_miles: number | null; // Added distance_miles
 }
 
 interface HospitalGridProps {
