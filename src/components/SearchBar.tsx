@@ -23,7 +23,7 @@ const SearchBar: React.FC = () => {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="e.g., Knee replacement cost in Boston"
+          placeholder="e.g., Knee replacement cost in Alabama"
           className="w-full py-4 pl-14 pr-6 text-xl text-gray-800 bg-transparent border-none focus:outline-none placeholder-gray-500"
         />
       </div>
