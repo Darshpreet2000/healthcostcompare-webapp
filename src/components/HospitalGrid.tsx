@@ -14,7 +14,6 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import StarIcon from "@mui/icons-material/Star";
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import EmergencyIcon from '@mui/icons-material/Emergency';
 import GroupIcon from '@mui/icons-material/Group';
 import PaidIcon from '@mui/icons-material/Paid';
 
@@ -146,7 +145,6 @@ const HospitalGrid: React.FC<HospitalGridProps> = ({
                         )}
                         {hospital.emergency_services && (
                           <Box sx={{ display: 'flex', alignItems: 'center' }} aria-label={`Emergency Services: ${hospital.emergency_services}`}>
-                            <EmergencyIcon sx={{ mr: 1, color: '#ffc107', fontSize: 'small' }} />
                             <Typography variant="body2" color="text.secondary">
                               Emergency: {hospital.emergency_services}
                             </Typography>
