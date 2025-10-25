@@ -1,76 +1,205 @@
 import React from "react";
-import { Star, DollarSign, MapPin } from "lucide-react"; // Assuming lucide-react for icons
+import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Grid,
+  Box,
+  Rating,
+  Tooltip,
+} from "@mui/material";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import StarIcon from "@mui/icons-material/Star";
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import EmergencyIcon from '@mui/icons-material/Emergency';
+import GroupIcon from '@mui/icons-material/Group';
+import PaidIcon from '@mui/icons-material/Paid';
+
+interface ProcedureCostDetail {
+  drg_description: string;
+  avg_total_payment: number;
+  medicare_payment: number;
+  total_discharges: number;
+  avg_submitted_covered_charge: number;
+}
 
 interface Hospital {
   id: string;
   name: string;
   rating: number;
-  avgTotalPayment: number;
-  medicarePayment: number; // Added medicarePayment
-  location: string; // e.g., "City, State"
-  distance_miles: number | null; // Added distance_miles
+  location: string;
+  distance_miles: number | null;
+  imageUrl?: string;
+  hospital_type?: string;
+  emergency_services?: string;
+  procedure_cost_details: ProcedureCostDetail[];
 }
 
 interface HospitalGridProps {
   hospitals: Hospital[];
-  onCompare?: (hospitalId: string) => void;
   onViewDetails?: (hospitalId: string) => void;
 }
 
 const HospitalGrid: React.FC<HospitalGridProps> = ({
   hospitals,
-  onCompare,
   onViewDetails,
 }) => {
-  const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+  const formatCurrency = (amount: number | null | undefined) => {
+    if (amount === null || amount === undefined || isNaN(amount)) {
+      return "N/A";
+    }
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+  };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Additional Hospitals</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {hospitals.map((hospital) => (
-          <div
-            key={hospital.id}
-            className="border border-gray-200 rounded-lg p-4 bg-gray-50 flex flex-col justify-between"
-          >
-            <div>
-              <h3 className="text-xl font-semibold text-primary mb-2 flex items-center gap-2">
-                <span role="img" aria-label="hospital">🏥</span> {hospital.name}
-              </h3>
-              <p className="flex items-center gap-2 text-gray-700">
-                <Star size={18} className="text-yellow-500" /> {hospital.rating}
-              </p>
-              <p className="flex items-center gap-2 text-gray-700">
-                <DollarSign size={18} className="text-green-600" />{" "}
-                <span className="font-bold">{formatCurrency(hospital.avgTotalPayment)}</span>
-              </p>
-              <p className="flex items-center gap-2 text-gray-700">
-                <MapPin size={18} className="text-red-500" /> {hospital.location}
-              </p>
-            </div>
-            <div className="flex gap-2 mt-4">
-              {onCompare && (
-                <button
-                  onClick={() => onCompare(hospital.id)}
-                  className="flex-1 bg-accent text-white px-3 py-2 rounded-full text-sm hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 transition-colors duration-200"
-                >
-                  Compare
-                </button>
-              )}
-              {onViewDetails && (
-                <button
-                  onClick={() => onViewDetails(hospital.id)}
-                  className="flex-1 bg-gray-200 text-gray-700 px-3 py-2 rounded-full text-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-colors duration-200"
-                >
-                  View Details
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <Box sx={{ flexGrow: 1, p: 3 }}>
+      <Typography variant="h4" component="h2" gutterBottom align="center" sx={{ mb: 4, fontWeight: 'bold', color: '#1a202c' }}>
+        Hospital Details with the procedure
+      </Typography>
+      <Grid container spacing={4}> {/* Removed component="div" from container */}
+        {hospitals.map((hospital, index) => {
+          const firstProcedure = hospital.procedure_cost_details[0];
+          return (
+            <Grid item xs={12} sm={6} md={4} key={`${hospital.id}-${index}`} component="div" sx={{ height: "100%" }}> {/* Added height: "100%" */}
+              <Card
+                elevation={6}
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  boxShadow: 3,
+                  borderRadius: 2,
+                  transition: 'transform 0.2s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                    boxShadow: 8,
+                  },
+                }}
+              >
+                {hospital.imageUrl && (
+                  <Box sx={{ position: 'relative', width: '100%', height: 200, overflow: 'hidden' }}>
+                    <Image
+                      src={hospital.imageUrl}
+                      alt={hospital.name}
+                      layout="fill"
+                      objectFit="cover"
+                      style={{ borderRadius: '8px 8px 0 0' }}
+                    />
+                  </Box>
+                )}
+                <CardContent sx={{ 
+                  flexGrow: 1, 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  justifyContent: 'space-between',
+                  minHeight: 350, // Increased minHeight further
+                  p: 2,
+                }}>
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: '#2c3e50', mb: 0.5 }} aria-label={`Hospital name: ${hospital.name}`}>
+                      {hospital.name}
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }} aria-label={`Rating: ${hospital.rating} out of 5 stars`}>
+                      <Rating name="read-only" value={hospital.rating} readOnly precision={0.5} emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />} />
+                      <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                        ({hospital.rating})
+                      </Typography>
+                    </Box>
+                    
+                    {firstProcedure && (
+                      <Tooltip title="Average total payment for the procedure." arrow>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }} aria-label={`Procedure price: ${formatCurrency(firstProcedure.avg_total_payment)}`}>
+                          <AttachMoneyIcon sx={{ mr: 1, color: '#28a745', fontSize: 'large' }} />
+                          <Typography variant="h5" color="primary" sx={{ fontWeight: 'bold' }}>
+                            {formatCurrency(firstProcedure.avg_total_payment)}
+                          </Typography>
+                        </Box>
+                      </Tooltip>
+                    )}
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }} aria-label={`Location: ${hospital.location}`}>
+                      <LocationOnIcon sx={{ mr: 1, color: '#dc3545', fontSize: 'small' }} />
+                      <Typography variant="body2" color="text.secondary">
+                        {hospital.location}
+                      </Typography>
+                    </Box>
+                    {hospital.distance_miles !== null && (
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }} aria-label={`${hospital.distance_miles.toFixed(1)} miles away`}>
+                        {hospital.distance_miles.toFixed(1)} miles away
+                      </Typography>
+                    )}
+
+                    {/* Hospital Type and Emergency Services */}
+                    {(hospital.hospital_type || hospital.emergency_services) && (
+                      <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
+                        {hospital.hospital_type && (
+                          <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }} aria-label={`Hospital type: ${hospital.hospital_type}`}>
+                            <LocalHospitalIcon sx={{ mr: 1, color: '#007bff', fontSize: 'small' }} />
+                            <Typography variant="body2" color="text.secondary">
+                              Type: {hospital.hospital_type}
+                            </Typography>
+                          </Box>
+                        )}
+                        {hospital.emergency_services && (
+                          <Box sx={{ display: 'flex', alignItems: 'center' }} aria-label={`Emergency Services: ${hospital.emergency_services}`}>
+                            <EmergencyIcon sx={{ mr: 1, color: '#ffc107', fontSize: 'small' }} />
+                            <Typography variant="body2" color="text.secondary">
+                              Emergency: {hospital.emergency_services}
+                            </Typography>
+                          </Box>
+                        )}
+                      </Box>
+                    )}
+
+                    {/* Procedure Description */}
+                    {firstProcedure && firstProcedure.drg_description && (
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }} aria-label={`Procedure: ${firstProcedure.drg_description}`}>
+                        Procedure: {firstProcedure.drg_description}
+                      </Typography>
+                    )}
+
+                    {/* Discharges and Covered Charge */}
+                    {firstProcedure && firstProcedure.total_discharges !== undefined && (
+                      <Tooltip title="Total number of patient discharges for this procedure at this hospital." arrow>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }} aria-label={`Total discharges: ${firstProcedure.total_discharges}`}>
+                          <GroupIcon sx={{ mr: 1, color: '#6c757d', fontSize: 'small' }} />
+                          <Typography variant="body2" color="text.secondary">
+                            Total Discharges: {firstProcedure.total_discharges}
+                          </Typography>
+                        </Box>
+                      </Tooltip>
+                    )}
+                    {firstProcedure && firstProcedure.avg_submitted_covered_charge !== undefined && (
+                      <Tooltip title="Average insurance coverage amount for this procedure." arrow>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }} aria-label={`Average covered charge: ${formatCurrency(firstProcedure.avg_submitted_covered_charge)}`}>
+                          <PaidIcon sx={{ mr: 1, color: '#17a2b8', fontSize: 'small' }} />
+                          <Typography variant="body2" color="text.secondary">
+                            Avg. Covered Charge: {formatCurrency(firstProcedure.avg_submitted_covered_charge)}
+                          </Typography>
+                        </Box>
+                      </Tooltip>
+                    )}
+                  </Box>
+                  {onViewDetails && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => onViewDetails(hospital.id)}
+                      sx={{ mt: 2, alignSelf: 'flex-start' }}
+                    >
+                      View Details
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
+    </Box>
   );
 };
 

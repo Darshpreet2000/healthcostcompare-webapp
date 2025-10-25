@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [100, 75],
     formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      {
+        hostname: 'encrypted-tbn0.gstatic.com',
+      },
+    ],
   },
   experimental: {
     // This is for Turbopack, if you're using it.

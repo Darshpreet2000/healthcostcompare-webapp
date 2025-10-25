@@ -1,16 +1,47 @@
 import React from "react";
-import { Brain, Lightbulb } from "lucide-react"; // Assuming lucide-react for icons
+import { Brain, Lightbulb } from "lucide-react";
 import GradientText from "./GradientText";
-import ReactMarkdown from "react-markdown"; // Import react-markdown
+import ReactMarkdown from "react-markdown";
+import { Components } from "react-markdown";
+import remarkGfm from "remark-gfm"; // Import remarkGfm
 
 interface InsightsCardProps {
   title: string;
   summary: string;
   costVariation: string;
   patientQuestions: string[];
-  fullInsightsMarkdown: string; // New prop for full markdown content
+  fullInsightsMarkdown: string;
   onRegenerate?: () => void;
 }
+
+const renderers: Components = {
+  table: ({ children }) => (
+    <div className="overflow-x-auto my-4">
+      <table className="min-w-full divide-y divide-gray-300 border border-gray-200 rounded-lg">
+        {children}
+      </table>
+    </div>
+  ),
+  thead: ({ children }) => <thead className="bg-gray-50">{children}</thead>,
+  th: ({ children }) => (
+    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
+      {children}
+    </th>
+  ),
+  td: ({ children }) => (
+    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-800 border-b border-gray-200">
+      {children}
+    </td>
+  ),
+  p: ({ children }) => <p className="mb-4">{children}</p>,
+  h1: ({ children }) => <h1 className="text-2xl font-bold mt-6 mb-3">{children}</h1>,
+  h2: ({ children }) => <h2 className="text-xl font-bold mt-5 mb-2">{children}</h2>,
+  h3: ({ children }) => <h3 className="text-lg font-bold mt-4 mb-2">{children}</h3>,
+  ul: ({ children }) => <ul className="list-disc list-inside ml-4 mb-4 space-y-1">{children}</ul>,
+  ol: ({ children }) => <ol className="list-decimal list-inside ml-4 mb-4 space-y-1">{children}</ol>,
+  li: ({ children }) => <li className="mb-1">{children}</li>,
+  hr: () => <hr className="my-8 border-t-2 border-gray-200" />,
+};
 
 const InsightsCard: React.FC<InsightsCardProps> = ({
   title,
@@ -27,7 +58,9 @@ const InsightsCard: React.FC<InsightsCardProps> = ({
       </h2>
       {/* Render full markdown content */}
       <div className="prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl max-w-none text-gray-800 leading-relaxed mb-6">
-        <ReactMarkdown>{fullInsightsMarkdown}</ReactMarkdown>
+        <ReactMarkdown components={renderers} remarkPlugins={[remarkGfm]}>
+          {fullInsightsMarkdown}
+        </ReactMarkdown>
       </div>
 
       {/* Reintroducing specific sections for clarity and visual emphasis */}

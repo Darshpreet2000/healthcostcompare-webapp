@@ -8,14 +8,24 @@ import HospitalGrid from "@/components/HospitalGrid";
 import GradientText from "@/components/GradientText";
 import { Loader2 } from "lucide-react"; // For spinner icon
 
+interface ProcedureCostDetail {
+  drg_description: string;
+  avg_total_payment: number;
+  medicare_payment: number;
+  total_discharges: number;
+  avg_submitted_covered_charge: number;
+}
+
 interface HospitalData {
   id: string;
   name: string;
   rating: number;
-  avgTotalPayment: number;
-  medicarePayment: number;
   location: string;
   distance_miles: number | null;
+  imageUrl?: string;
+  hospital_type?: string;
+  emergency_services?: string;
+  procedure_cost_details: ProcedureCostDetail[];
 }
 
 interface ApiResponse {
@@ -38,6 +48,7 @@ export default function SearchResultsClient() {
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
   const [apiData, setApiData] = useState<ApiResponse | null>(null);
+  const [hospitalsWithImages, setHospitalsWithImages] = useState<HospitalData[]>([]); // New state for hospitals with images
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentLoadingMessage, setCurrentLoadingMessage] = useState(loadingMessages[0]);
@@ -66,25 +77,46 @@ export default function SearchResultsClient() {
       }, 3000); // Change message every 3 seconds
 
       try {
-        const response = await fetch(`/api/search?query=${query}`); // Use the proxy route
+        const response = await fetch(`/api/search?query=${query}`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
         }
         const data: ApiResponse = await response.json();
         setApiData(data);
+
+        // Fetch images for hospitals
+        const hospitalsWithImagePromises = data.hospital_comparison.map(async (hospital) => {
+          try {
+            const imageResponse = await fetch(`/api/hospital-image-search?name=${encodeURIComponent(hospital.name)}`);
+            if (imageResponse.ok) {
+              const imageData = await imageResponse.json();
+              return { ...hospital, imageUrl: imageData.imageUrl };
+            } else {
+              console.warn(`Could not fetch image for ${hospital.name}: ${imageResponse.statusText}`);
+              return { ...hospital, imageUrl: "/hospital_image.png" }; // Fallback to placeholder
+            }
+          } catch (imageError) {
+            console.error(`Error fetching image for ${hospital.name}:`, imageError);
+            return { ...hospital, imageUrl: "/hospital_image.png" }; // Fallback to placeholder
+          }
+        });
+
+        const resolvedHospitalsWithImages = await Promise.all(hospitalsWithImagePromises);
+        setHospitalsWithImages(resolvedHospitalsWithImages);
+
       } catch (e: any) {
         setError(e.message);
       } finally {
         setLoading(false);
-        clearInterval(messageInterval); // Stop cycling messages
+        clearInterval(messageInterval);
       }
     };
 
     fetchData();
 
     return () => {
-      clearInterval(messageInterval); // Cleanup interval on unmount
+      clearInterval(messageInterval);
     };
   }, [query]);
 
@@ -126,20 +158,9 @@ export default function SearchResultsClient() {
     fullInsightsMarkdown: apiData.insights, // Pass the full markdown
   };
 
-  // Prepare data for HospitalGrid
-  const hospitalsForGrid = apiData.hospital_comparison.map((hospital) => ({
-    id: hospital.name, // Using name as ID for now
-    name: hospital.name,
-    rating: hospital.rating,
-    avgTotalPayment: hospital.avgTotalPayment,
-    medicarePayment: hospital.medicarePayment,
-    location: hospital.location,
-    distance_miles: hospital.distance_miles,
-  }));
-
   // For CompareCard, we'll take the first two hospitals from the comparison if available
-  const hospitalA = hospitalsForGrid[0] || null;
-  const hospitalB = hospitalsForGrid[1] || null;
+  const hospitalA = hospitalsWithImages[0] || null;
+  const hospitalB = hospitalsWithImages[1] || null;
 
   return (
     <main className="flex-grow container mx-auto px-6 py-10 sm:px-8 sm:py-12 space-y-10">
@@ -149,16 +170,9 @@ export default function SearchResultsClient() {
 
       <InsightsCard {...insightsCardProps} />
 
-      {hospitalA && hospitalB && (
-        <CompareCard
-          hospitalA={hospitalA}
-          hospitalB={hospitalB}
-          summary="Comparing the top two hospitals based on your search." // This summary could be more dynamic
-        />
-      )}
 
-      {hospitalsForGrid.length > 0 && (
-        <HospitalGrid hospitals={hospitalsForGrid} />
+      {hospitalsWithImages.length > 0 && (
+        <HospitalGrid hospitals={hospitalsWithImages} />
       )}
     </main>
   );
