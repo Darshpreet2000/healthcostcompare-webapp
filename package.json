@@ -20,6 +20,7 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.15"
   },
+  
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
