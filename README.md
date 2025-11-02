@@ -16,6 +16,19 @@ While this step improved transparency, the raw data is not easily understandable
 
 Patients lack accessible tools to understand and compare the costs of medical procedures. Although hospitals publish their data, it’s not patient-friendly. Users struggle to interpret chargemaster data, map procedures, and make cost-effective healthcare decisions.
 
+## Live Demo
+
+You can access the live application here: [https://healthcostcompare-webapp.vercel.app/](https://healthcostcompare-webapp.vercel.app/)
+
+## Architecture Diagram
+
+![MediCompare AI Architecture Diagram](../diagram_img.png)
+
+## Data Sources
+
+*   Medicare Inpatient procedure pricing: [https://data.cms.gov/provider-summary-by-type-of-service/medicare-inpatient-hospitals/medicare-inpatient-hospitals-by-provider-and-service/data](https://data.cms.gov/provider-summary-by-type-of-service/medicare-inpatient-hospitals/medicare-inpatient-hospitals-by-provider-and-service/data)
+*   Hospitals General Information: [https://data.cms.gov/provider-data/dataset/xubh-q36u#data-table](https://data.cms.gov/provider-data/dataset/xubh-q36u#data-table)
+
 ## Solution
 
 MediCompare AI is a patient-centric cost explorer that helps users:
@@ -63,10 +76,6 @@ MediCompare AI is a patient-centric cost explorer that helps users:
 *   **Backend:** FastAPI, Python
 *   **AI/NLP:** Gemini AI Studio (Vertex AI)
 *   **Data Integration:** Fivetran, Google BigQuery
-*   **Data Sources:**
-    *   Medicare Inpatient procedure pricing: [https://data.cms.gov/provider-summary-by-type-of-service/medicare-inpatient-hospitals/medicare-inpatient-hospitals-by-provider-and-service/data](https://data.cms.gov/provider-summary-by-type-of-service/medicare-inpatient-hospitals/medicare-inpatient-hospitals-by-provider-and-service/data)
-    *   Hospitals General Information: [https://data.cms.gov/provider-data/dataset/xubh-q36u#data-table](https://data.cms.gov/provider-data/dataset/xubh-q36u#data-table)
-
 ## Setup and Installation
 
 To get MediCompare AI up and running locally, follow these steps:
@@ -107,14 +116,6 @@ To get MediCompare AI up and running locally, follow these steps:
 *   Provide personalized cost estimates using insurance or demographic inputs.
 *   Add data visualization dashboards for deeper insights.
 *   Expand dataset coverage to include outpatient and specialty procedures.
-
-## Architecture Diagram
-
-![MediCompare AI Architecture Diagram](../diagram_img.png)
-
-## Live Demo
-
-You can access the live application here: [https://healthcostcompare-webapp.vercel.app/](https://healthcostcompare-webapp.vercel.app/)
 
 ## Contributing
 
