@@ -22,7 +22,7 @@ You can access the live application here: [https://healthcostcompare-webapp.verc
 
 ## Architecture Diagram
 
-![[MediCompare AI Architecture Diagram](../diagram_img.png](https://raw.githubusercontent.com/Darshpreet2000/healthcostcompare-webapp/refs/heads/main/diagram_img.png))
+![https://raw.githubusercontent.com/Darshpreet2000/healthcostcompare-webapp/refs/heads/main/diagram_img.png]
 
 ## Data Sources
 
