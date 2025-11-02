@@ -63,7 +63,9 @@ MediCompare AI is a patient-centric cost explorer that helps users:
 *   **Backend:** FastAPI, Python
 *   **AI/NLP:** Gemini AI Studio (Vertex AI)
 *   **Data Integration:** Fivetran, Google BigQuery
-*   **Data Sources:** Medicare CMS inpatient datasets, hospital chargemaster data, general hospital information
+*   **Data Sources:**
+    *   Medicare Inpatient procedure pricing: [https://data.cms.gov/provider-summary-by-type-of-service/medicare-inpatient-hospitals/medicare-inpatient-hospitals-by-provider-and-service/data](https://data.cms.gov/provider-summary-by-type-of-service/medicare-inpatient-hospitals/medicare-inpatient-hospitals-by-provider-and-service/data)
+    *   Hospitals General Information: [https://data.cms.gov/provider-data/dataset/xubh-q36u#data-table](https://data.cms.gov/provider-data/dataset/xubh-q36u#data-table)
 
 ## Setup and Installation
 
@@ -105,6 +107,14 @@ To get MediCompare AI up and running locally, follow these steps:
 *   Provide personalized cost estimates using insurance or demographic inputs.
 *   Add data visualization dashboards for deeper insights.
 *   Expand dataset coverage to include outpatient and specialty procedures.
+
+## Architecture Diagram
+
+![MediCompare AI Architecture Diagram](../diagram_img.png)
+
+## Live Demo
+
+You can access the live application here: [https://healthcostcompare-webapp.vercel.app/](https://healthcostcompare-webapp.vercel.app/)
 
 ## Contributing
 
