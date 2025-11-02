@@ -6,23 +6,26 @@
 
 MediCompare AI is an AI-powered platform that enables users to compare the cost of medical procedures across hospitals in an intuitive and patient-friendly way. It leverages Medicare CMS inpatient datasets, hospital chargemaster data, and AI-generated insights to make healthcare pricing transparent and understandable.
 
-### Background & Motivation
+## Live Demo
 
-Recent changes in Medicare’s payment policies under the Inpatient Prospective Payment System (PPS) and the Long-Term Care Hospital PPS required hospitals to make their Chargemaster (CDM) data publicly available in machine-readable formats (XML or CSV) starting January 1, 2019.
+You can access the live application here: [https://healthcostcompare-webapp.vercel.app/](https://healthcostcompare-webapp.vercel.app/)
 
-While this step improved transparency, the raw data is not easily understandable by patients. Chargemaster files are large, complex, and technical—making it hard for people to meaningfully compare procedure prices across hospitals.
 
 ### Problem Statement
 
 Patients lack accessible tools to understand and compare the costs of medical procedures. Although hospitals publish their data, it’s not patient-friendly. Users struggle to interpret chargemaster data, map procedures, and make cost-effective healthcare decisions.
 
-## Live Demo
-
-You can access the live application here: [https://healthcostcompare-webapp.vercel.app/](https://healthcostcompare-webapp.vercel.app/)
 
 ## Architecture Diagram
 
 ![](https://raw.githubusercontent.com/Darshpreet2000/healthcostcompare-webapp/refs/heads/main/diagram_img.png)
+
+
+### Background & Motivation
+
+Recent changes in Medicare’s payment policies under the Inpatient Prospective Payment System (PPS) and the Long-Term Care Hospital PPS required hospitals to make their Chargemaster (CDM) data publicly available in machine-readable formats (XML or CSV) starting January 1, 2019.
+
+While this step improved transparency, the raw data is not easily understandable by patients. Chargemaster files are large, complex, and technical—making it hard for people to meaningfully compare procedure prices across hospitals.
 
 ## Data Sources
 
